@@ -1,0 +1,29 @@
+{
+	"Function": [
+		"approx_count_distinct(x)",
+		"approx_quantile(x,pos)",
+		"reservoir_quantile(x,quantile,sample_size=8192)",
+		"Function",
+		"approx_count_distinct(x)",
+		"approx_quantile(x,pos)",
+		"reservoir_quantile(x,quantile,sample_size=8192)"
+	],
+	"Description": [
+		"Gives the approximate count of distintinct elements using HyperLogLog.",
+		"Gives the approximate quantile using T-Digest.",
+		"Gives the approximate quantile using reservoir sampling, the sample size is optional and uses 8192 as a default size.",
+		"Description",
+		"Gives the approximate count of distintinct elements using HyperLogLog.",
+		"Gives the approximate quantile using T-Digest.",
+		"Gives the approximate quantile using reservoir sampling, the sample size is optional and uses 8192 as a default size."
+	],
+	"Example": [
+		"approx_count_distinct(A)",
+		"approx_quantile(A,0.5)",
+		"reservoir_quantile(A,0.5,1024)",
+		"Example",
+		"approx_count_distinct(A)",
+		"approx_quantile(A,0.5)",
+		"reservoir_quantile(A,0.5,1024)"
+	]
+}

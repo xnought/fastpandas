@@ -2,37 +2,37 @@ import pandas as pd
 import duckdb
 
 
-class DuckDBAtom:
+class DuckDBUnary:
     def __init__(self, func, column):
         self.func = func
         self.column = column
 
-    def result(self):
-        if isinstance(self.column, DuckDBAtom):
-            return self.func(self.column.result())
+    def compile(self):
+        if isinstance(self.column, DuckDBUnary):
+            return self.func(self.column.compile())
         return self.func(self.column)
 
-    def agg(self, _df):
-        name = self.result()
+    def item(self, _df):
+        name = self.compile()
         query = f"""SELECT {name} as result from _df"""
         return duckdb.query(query).df()["result"][0]
 
-    def full(self, _df):
-        name = self.result()
+    def df(self, _df):
+        name = self.compile()
         query = f"""SELECT {name} from _df"""
         return duckdb.query(query).df()
 
 
 def entropy(column):
-    return DuckDBAtom(lambda c: f"entropy({c})", column)
+    return DuckDBUnary(lambda c: f"entropy({c})", column)
 
 
-def avg(column: DuckDBAtom):
-    return DuckDBAtom(lambda c: f"avg({c})", column)
+def avg(column: DuckDBUnary):
+    return DuckDBUnary(lambda c: f"avg({c})", column)
 
 
-def mult(column: DuckDBAtom, n: float):
-    return DuckDBAtom(lambda c: f"{c}*{n}", column)
+def mult(column: DuckDBUnary, n: float):
+    return DuckDBUnary(lambda c: f"({c}*{n})", column)
 
 
 class FastPandas:
@@ -45,36 +45,38 @@ class FastPandas:
 
     def column(self, name):
         if name in self.dataframe.columns:
-            return FastPandas(self.dataframe, DuckDBAtom(lambda c: c, name))
+            return FastPandas(self.dataframe, DuckDBUnary(lambda c: c, f'"{name}"'))
         else:
             raise KeyError(f"{name} not in columns")
 
     def approx_count_distinct(self):
         return FastPandas(
-            df, DuckDBAtom(lambda c: f"approx_count_distinct({c})", self.graph)
-        ).item()
+            df, DuckDBUnary(lambda c: f"approx_count_distinct({c})", self.graph)
+        )
 
     def mult(self, other):
         return FastPandas(df, mult(self.graph, other))
 
     def add(self, other):
-        return FastPandas(df, DuckDBAtom(lambda c: f"{c}+{other}", self.graph))
+        return FastPandas(df, DuckDBUnary(lambda c: f"({c}+{other})", self.graph))
 
     def entropy(self):
-        return FastPandas(df, entropy(self.graph)).item()
+        return FastPandas(df, entropy(self.graph))
 
     def avg(self):
-        return FastPandas(df, avg(self.graph)).item()
+        return FastPandas(df, avg(self.graph))
 
     def df(self):
-        return self.graph.full(self.dataframe)
+        return self.graph.df(self.dataframe)
 
     def item(self):
-        return self.graph.agg(self.dataframe)
+        return self.graph.item(self.dataframe)
+
+    def __repr__(self) -> str:
+        return self.graph.compile()
 
 
 if __name__ == "__main__":
     df = pd.DataFrame({"a": list(range(100_000))})
-    fastdf = FastPandas(df)
-    result = fastdf["a"].add(25).mult(2).avg()
-    print(result)
+    result = FastPandas(df)["a"].add(25).mult(2).avg()
+    print(result, result.item())

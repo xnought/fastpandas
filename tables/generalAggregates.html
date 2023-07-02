@@ -1,0 +1,346 @@
+<table>
+	<thead>
+		<tr>
+			<th style="text-align: left">Function</th>
+			<th style="text-align: left">Description</th>
+			<th style="text-align: left">Example</th>
+			<th style="text-align: left">Alias(es)</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>arg_max(arg,val)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Calculates the arg value for a maximum val value.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>arg_max(A,B)</code
+				>
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>argMax(A,B)</code
+				>,
+				<code class="language-plaintext highlighter-rouge"
+					>max_by(A,b)</code
+				>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>arg_min(arg,val)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Calculates the arg value for a minimum val value.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>arg_min(A,B)</code
+				>
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>argMin(A,B)</code
+				>,
+				<code class="language-plaintext highlighter-rouge"
+					>min_by(A,B)</code
+				>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>avg(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Calculates the average value for all tuples in arg.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge">avg(A)</code>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>bit_and(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the bitwise AND of all bits in a given expression .
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>bit_and(A)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>bit_or(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the bitwise OR of all bits in a given expression.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>bit_or(A)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>bit_xor(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the bitwise XOR of all bits in a given expression.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>bit_xor(A)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>bool_and(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns TRUE if every input value is TRUE, otherwise FALSE.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>bool_and(A)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>bool_or(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns TRUE if any input value is TRUE, otherwise FALSE.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>bool(A)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>count(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Calculates the number of tuples tuples in arg.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>count(A)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>first(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the first value of a column.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>first(A)</code
+				>
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>arbitrary(A)</code
+				>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>histogram(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns a
+				<code class="language-plaintext highlighter-rouge">LIST</code>
+				of
+				<code class="language-plaintext highlighter-rouge">STRUCT</code
+				>s with the fields
+				<code class="language-plaintext highlighter-rouge">bucket</code>
+				and
+				<code class="language-plaintext highlighter-rouge">count</code>.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>histogram(A)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>last(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the last value of a column.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>last(A)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>list(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns a
+				<code class="language-plaintext highlighter-rouge">LIST</code>
+				containing all the values of a column.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>list(A)</code
+				>
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>array_agg</code
+				>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>max(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the maximum value present in arg.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge">max(A)</code>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>min(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the minumum value present in arg.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge">min(A)</code>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>product(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Calculates the product of all tuples in arg
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>product(A)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>string_agg(arg, sep)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Concatenates the column string values with a separator
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>string_agg(S, ',')</code
+				>
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>group_concat</code
+				>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>sum(arg)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Calculates the sum value for all tuples in arg.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge">sum(A)</code>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+	</tbody>
+</table>
+
+<script>
+	const table = document.querySelectorAll("tr");
+	const arr = Array.from(table);
+	const headers = Array.from(arr[0].children).map((x) => x.innerText);
+	console.log(headers);
+
+	const headersObj = {};
+	for (let i = 0; i < headers.length; i++) {
+		headersObj[headers[i]] = [];
+	}
+
+	for (let i = 1; i < arr.length; i++) {
+		for (let j = 0; j < arr[i].children.length; j++) {
+			headersObj[headers[j]].push(arr[i].children[j].innerText);
+		}
+	}
+	console.log(headersObj);
+</script>

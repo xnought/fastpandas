@@ -1,0 +1,358 @@
+<table>
+	<thead>
+		<tr>
+			<th style="text-align: left">Function</th>
+			<th style="text-align: left">Description</th>
+			<th style="text-align: left">Formula</th>
+			<th style="text-align: left">Alias</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>corr(y,x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the correlation coefficient for non-null pairs in a
+				group.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>COVAR_POP(y, x) / (STDDEV_POP(x) * STDDEV_POP(y))</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>covar_pop(y,x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the population covariance of input values.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>(SUM(x*y) - SUM(x) * SUM(y) / COUNT(*)) / COUNT(*)
+				</code>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>entropy(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the log-2 entropy of count input-values.
+			</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>kurtosis(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the excess kurtosis of all input values.
+			</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>mode(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the most frequent value for the values within x. NULL
+				values are ignored.
+			</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>quantile_cont(x,pos)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the intepolated quantile number between 0 and 1 . If
+				<code class="language-plaintext highlighter-rouge">pos</code> is
+				a
+				<code class="language-plaintext highlighter-rouge">LIST</code>
+				of
+				<code class="language-plaintext highlighter-rouge">FLOAT</code
+				>s, then the result is a
+				<code class="language-plaintext highlighter-rouge">LIST</code>
+				of the corresponding intepolated quantiles.
+			</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>quantile_disc(x,pos)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the exact quantile number between 0 and 1 . If
+				<code class="language-plaintext highlighter-rouge">pos</code> is
+				a
+				<code class="language-plaintext highlighter-rouge">LIST</code>
+				of
+				<code class="language-plaintext highlighter-rouge">FLOAT</code
+				>s, then the result is a
+				<code class="language-plaintext highlighter-rouge">LIST</code>
+				of the corresponding exact quantiles.
+			</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>quantile</code
+				>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>regr_avgx(y,x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the average of the independent variable for non-null
+				pairs in a group, where x is the independent variable and y is
+				the dependent variable.
+			</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>regr_avgy(y,x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the average of the dependent variable for non-null pairs
+				in a group, where x is the independent variable and y is the
+				dependent variable.
+			</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>regr_count(y,x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the number of non-null number pairs in a group.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>(SUM(x*y) - SUM(x) * SUM(y) / COUNT(*)) / COUNT(*)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>regr_intercept(y,x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the intercept of the univariate linear regression line
+				for non-null pairs in a group.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>AVG(y)-REGR_SLOPE(y,x)*AVG(x)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>regr_r2(y,x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the coefficient of determination for non-null pairs in a
+				group.
+			</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>regr_slope(y,x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the slope of the linear regression line for non-null
+				pairs in a group.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>COVAR_POP(x,y) / VAR_POP(x)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>regr_sxx(y,x)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>REGR_COUNT(y, x) * VAR_POP(x)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>regr_sxy(y,x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the population covariance of input values.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>REGR_COUNT(y, x) * COVAR_POP(y, x)
+				</code>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>regr_syy(y,x)</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>REGR_COUNT(y, x) * VAR_POP(y) f</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>skewness(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the skewness of all input values.
+			</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>stddev_pop(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the population standard deviation.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>sqrt(var_pop(x))</code
+				>
+			</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>stddev_samp(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the sample standard deviation.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>sqrt(var_samp(x))</code
+				>
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>stddev(x)</code
+				>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>var_pop(x)</code
+				>
+			</td>
+			<td style="text-align: left">Returns the population variance.</td>
+			<td style="text-align: left">-</td>
+			<td style="text-align: left">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>var_samp(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns the sample variance of all input values.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>(SUM(x^2) - SUM(x)^2 / COUNT(x)) / (COUNT(x) - 1)</code
+				>
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>variance(arg,val)</code
+				>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<script>
+	const table = document.querySelectorAll("tr");
+	const arr = Array.from(table);
+	const headers = Array.from(arr[0].children).map((x) => x.innerText);
+	console.log(headers);
+
+	const headersObj = {};
+	for (let i = 0; i < headers.length; i++) {
+		headersObj[headers[i]] = [];
+	}
+
+	for (let i = 1; i < arr.length; i++) {
+		for (let j = 0; j < arr[i].children.length; j++) {
+			headersObj[headers[j]].push(arr[i].children[j].innerText);
+		}
+	}
+	console.log(headersObj);
+</script>

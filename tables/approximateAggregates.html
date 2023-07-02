@@ -1,0 +1,135 @@
+<table>
+	<thead>
+		<tr>
+			<th style="text-align: left">Function</th>
+			<th style="text-align: left">Description</th>
+			<th style="text-align: left">Example</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>approx_count_distinct(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Gives the approximate count of distintinct elements using
+				HyperLogLog.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>approx_count_distinct(A)</code
+				>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>approx_quantile(x,pos)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Gives the approximate quantile using T-Digest.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>approx_quantile(A,0.5)</code
+				>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>reservoir_quantile(x,quantile,sample_size=8192)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Gives the approximate quantile using reservoir sampling, the
+				sample size is optional and uses 8192 as a default size.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>reservoir_quantile(A,0.5,1024)</code
+				>
+			</td>
+		</tr>
+	</tbody>
+	<table>
+		<thead>
+			<tr>
+				<th style="text-align: left">Function</th>
+				<th style="text-align: left">Description</th>
+				<th style="text-align: left">Example</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td style="text-align: left">
+					<code class="language-plaintext highlighter-rouge"
+						>approx_count_distinct(x)</code
+					>
+				</td>
+				<td style="text-align: left">
+					Gives the approximate count of distintinct elements using
+					HyperLogLog.
+				</td>
+				<td style="text-align: left">
+					<code class="language-plaintext highlighter-rouge"
+						>approx_count_distinct(A)</code
+					>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: left">
+					<code class="language-plaintext highlighter-rouge"
+						>approx_quantile(x,pos)</code
+					>
+				</td>
+				<td style="text-align: left">
+					Gives the approximate quantile using T-Digest.
+				</td>
+				<td style="text-align: left">
+					<code class="language-plaintext highlighter-rouge"
+						>approx_quantile(A,0.5)</code
+					>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: left">
+					<code class="language-plaintext highlighter-rouge"
+						>reservoir_quantile(x,quantile,sample_size=8192)</code
+					>
+				</td>
+				<td style="text-align: left">
+					Gives the approximate quantile using reservoir sampling, the
+					sample size is optional and uses 8192 as a default size.
+				</td>
+				<td style="text-align: left">
+					<code class="language-plaintext highlighter-rouge"
+						>reservoir_quantile(A,0.5,1024)</code
+					>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</table>
+
+<script>
+	const table = document.querySelectorAll("tr");
+	const arr = Array.from(table);
+	const headers = Array.from(arr[0].children).map((x) => x.innerText);
+	console.log(headers);
+
+	const headersObj = {};
+	for (let i = 0; i < headers.length; i++) {
+		headersObj[headers[i]] = [];
+	}
+
+	for (let i = 1; i < arr.length; i++) {
+		for (let j = 0; j < arr[i].children.length; j++) {
+			headersObj[headers[j]].push(arr[i].children[j].innerText);
+		}
+	}
+	console.log(headersObj);
+</script>
