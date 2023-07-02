@@ -1,4 +1,4 @@
-# fast-pandas
+# FastPandas
 
 Extremely fast functions for pandas dataframes built on top of DuckDB.
 
