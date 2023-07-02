@@ -86,24 +86,25 @@ numerical_ops = [
 unary = [*unary_aggregates, *unary_numerical]
 
 
-def decompose_unary(u):
+def parse_func(u="pow(x, y, z)"):
+    # outputs = ('pow', ['x', 'y', 'z'])
     name = u.split("(")[0]
-    parameter = u.split("(")[1].split(")")[0]
-    return name, parameter
+    parameters = u.split("(")[1].split(")")[0].split(",")
+    return name, [parameters.strip() for parameters in parameters]
 
 
 def compile_unary(u):
-    name, parameters = decompose_unary(u)
+    name, parameters = parse_func(u)
     func_name = "def {}:\n".format(u)
     func_body = "\treturn DuckDBUnary(lambda c: '{}' + '(' + c + ')', {})\n".format(
-        name, parameters
+        name, parameters[0]
     )
     full = func_name + func_body
     return full
 
 
 def add_unary_to_class(u):
-    name, _ = decompose_unary(u)
+    name, _ = parse_func(u)
     func_name = "\tdef {}(self):\n".format(name)
     func_body = f"\t\treturn FastPandas(self.dataframe, {name}(self.graph))"
     full = func_name + func_body
