@@ -69,6 +69,19 @@ unary_numerical = [
     "tan(x)",
 ]
 
+numerical_ops = [
+    ("+", "add"),
+    ("-", "sub"),
+    ("*", "mul"),
+    ("/", "div"),
+    ("%", "mod"),
+    ("<<", "lshift"),
+    (">>", "rshift"),
+    ("&", "_and"),
+    ("|", "_or"),
+    ("#", "xor"),
+]
+
 
 unary = [*unary_aggregates, *unary_numerical]
 
@@ -97,14 +110,22 @@ def add_unary_to_class(u):
     return full
 
 
+def compile_numeric_operator(operator, nickname):
+    func_name = f"\tdef {nickname}(self, other):\n"
+    func_body = "\t\treturn FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '{}' + str(other) + ')', self.graph))\n".format(
+        operator
+    )
+    full = func_name + func_body
+    return full
+
+
 with open("fast_pandas.py", "w") as f:
     f.write("from lazy import DuckDBUnary\n\n")
 
     for u in unary:
-        f.write("\n" + compile_unary(u) + "\n")
+        f.write(compile_unary(u) + "\n")
 
-    f.write(
-        """class FastPandas:
+    fast_pandas_class = """class FastPandas:
 	def __init__(self, dataframe, graph=None):
 		self.dataframe = dataframe
 		self.graph = graph
@@ -127,7 +148,11 @@ with open("fast_pandas.py", "w") as f:
 	def __repr__(self) -> str:
 		return self.graph.compile()\n
 """
-    )
+
+    f.write(fast_pandas_class)
+
+    for op, nickname in numerical_ops:
+        f.write(compile_numeric_operator(op, nickname) + "\n")
 
     for u in unary:
         f.write(add_unary_to_class(u) + "\n\n")
