@@ -1,133 +1,187 @@
-from lazy import DuckDBUnary
+from lazy import DuckDBOp
 
 def avg(arg):
-	return DuckDBUnary(lambda c: 'avg' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'avg' + '(' + f'{arg}' + ')', arg)
 
 def bit_and(arg):
-	return DuckDBUnary(lambda c: 'bit_and' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'bit_and' + '(' + f'{arg}' + ')', arg)
 
 def bit_or(arg):
-	return DuckDBUnary(lambda c: 'bit_or' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'bit_or' + '(' + f'{arg}' + ')', arg)
 
 def bit_xor(arg):
-	return DuckDBUnary(lambda c: 'bit_xor' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'bit_xor' + '(' + f'{arg}' + ')', arg)
 
 def bool_and(arg):
-	return DuckDBUnary(lambda c: 'bool_and' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'bool_and' + '(' + f'{arg}' + ')', arg)
 
 def bool_or(arg):
-	return DuckDBUnary(lambda c: 'bool_or' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'bool_or' + '(' + f'{arg}' + ')', arg)
 
 def count(arg):
-	return DuckDBUnary(lambda c: 'count' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'count' + '(' + f'{arg}' + ')', arg)
 
 def first(arg):
-	return DuckDBUnary(lambda c: 'first' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'first' + '(' + f'{arg}' + ')', arg)
 
 def histogram(arg):
-	return DuckDBUnary(lambda c: 'histogram' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'histogram' + '(' + f'{arg}' + ')', arg)
 
 def last(arg):
-	return DuckDBUnary(lambda c: 'last' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'last' + '(' + f'{arg}' + ')', arg)
 
 def list(arg):
-	return DuckDBUnary(lambda c: 'list' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'list' + '(' + f'{arg}' + ')', arg)
 
 def max(arg):
-	return DuckDBUnary(lambda c: 'max' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'max' + '(' + f'{arg}' + ')', arg)
 
 def min(arg):
-	return DuckDBUnary(lambda c: 'min' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'min' + '(' + f'{arg}' + ')', arg)
 
 def product(arg):
-	return DuckDBUnary(lambda c: 'product' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'product' + '(' + f'{arg}' + ')', arg)
+
+def string_agg(arg, sep):
+	return DuckDBOp(lambda arg, sep: 'string_agg' + '(' + f'{arg}, {sep}' + ')', [arg, sep])
 
 def sum(arg):
-	return DuckDBUnary(lambda c: 'sum' + '(' + c + ')', arg)
+	return DuckDBOp(lambda arg: 'sum' + '(' + f'{arg}' + ')', arg)
 
 def approx_count_distinct(x):
-	return DuckDBUnary(lambda c: 'approx_count_distinct' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'approx_count_distinct' + '(' + f'{x}' + ')', x)
+
+def approx_quantile(x,pos):
+	return DuckDBOp(lambda x, pos: 'approx_quantile' + '(' + f'{x}, {pos}' + ')', [x, pos])
+
+def reservoir_quantile(x,quantile,sample_size):
+	return DuckDBOp(lambda x, quantile, sample_size: 'reservoir_quantile' + '(' + f'{x}, {quantile}, {sample_size}' + ')', [x, quantile, sample_size])
+
+def corr(y,x):
+	return DuckDBOp(lambda y, x: 'corr' + '(' + f'{y}, {x}' + ')', [y, x])
+
+def covar_pop(y,x):
+	return DuckDBOp(lambda y, x: 'covar_pop' + '(' + f'{y}, {x}' + ')', [y, x])
 
 def entropy(x):
-	return DuckDBUnary(lambda c: 'entropy' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'entropy' + '(' + f'{x}' + ')', x)
 
 def kurtosis(x):
-	return DuckDBUnary(lambda c: 'kurtosis' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'kurtosis' + '(' + f'{x}' + ')', x)
 
 def mode(x):
-	return DuckDBUnary(lambda c: 'mode' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'mode' + '(' + f'{x}' + ')', x)
+
+def quantile_cont(x,pos):
+	return DuckDBOp(lambda x, pos: 'quantile_cont' + '(' + f'{x}, {pos}' + ')', [x, pos])
+
+def quantile_disc(x,pos):
+	return DuckDBOp(lambda x, pos: 'quantile_disc' + '(' + f'{x}, {pos}' + ')', [x, pos])
+
+def regr_avgx(y,x):
+	return DuckDBOp(lambda y, x: 'regr_avgx' + '(' + f'{y}, {x}' + ')', [y, x])
+
+def regr_avgy(y,x):
+	return DuckDBOp(lambda y, x: 'regr_avgy' + '(' + f'{y}, {x}' + ')', [y, x])
+
+def regr_count(y,x):
+	return DuckDBOp(lambda y, x: 'regr_count' + '(' + f'{y}, {x}' + ')', [y, x])
+
+def regr_intercept(y,x):
+	return DuckDBOp(lambda y, x: 'regr_intercept' + '(' + f'{y}, {x}' + ')', [y, x])
+
+def regr_r2(y,x):
+	return DuckDBOp(lambda y, x: 'regr_r2' + '(' + f'{y}, {x}' + ')', [y, x])
+
+def regr_slope(y,x):
+	return DuckDBOp(lambda y, x: 'regr_slope' + '(' + f'{y}, {x}' + ')', [y, x])
+
+def regr_sxx(y,x):
+	return DuckDBOp(lambda y, x: 'regr_sxx' + '(' + f'{y}, {x}' + ')', [y, x])
+
+def regr_sxy(y,x):
+	return DuckDBOp(lambda y, x: 'regr_sxy' + '(' + f'{y}, {x}' + ')', [y, x])
+
+def regr_syy(y,x):
+	return DuckDBOp(lambda y, x: 'regr_syy' + '(' + f'{y}, {x}' + ')', [y, x])
 
 def skewness(x):
-	return DuckDBUnary(lambda c: 'skewness' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'skewness' + '(' + f'{x}' + ')', x)
 
 def stddev_pop(x):
-	return DuckDBUnary(lambda c: 'stddev_pop' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'stddev_pop' + '(' + f'{x}' + ')', x)
 
 def stddev_samp(x):
-	return DuckDBUnary(lambda c: 'stddev_samp' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'stddev_samp' + '(' + f'{x}' + ')', x)
 
 def var_pop(x):
-	return DuckDBUnary(lambda c: 'var_pop' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'var_pop' + '(' + f'{x}' + ')', x)
 
 def var_samp(x):
-	return DuckDBUnary(lambda c: 'var_samp' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'var_samp' + '(' + f'{x}' + ')', x)
 
 def abs(x):
-	return DuckDBUnary(lambda c: 'abs' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'abs' + '(' + f'{x}' + ')', x)
 
 def acos(x):
-	return DuckDBUnary(lambda c: 'acos' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'acos' + '(' + f'{x}' + ')', x)
+
+def atan2(x, y):
+	return DuckDBOp(lambda x, y: 'atan2' + '(' + f'{x}, {y}' + ')', [x, y])
 
 def bit_count(x):
-	return DuckDBUnary(lambda c: 'bit_count' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'bit_count' + '(' + f'{x}' + ')', x)
 
 def cbrt(x):
-	return DuckDBUnary(lambda c: 'cbrt' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'cbrt' + '(' + f'{x}' + ')', x)
 
 def ceil(x):
-	return DuckDBUnary(lambda c: 'ceil' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'ceil' + '(' + f'{x}' + ')', x)
 
 def chr(x):
-	return DuckDBUnary(lambda c: 'chr' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'chr' + '(' + f'{x}' + ')', x)
 
 def cos(x):
-	return DuckDBUnary(lambda c: 'cos' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'cos' + '(' + f'{x}' + ')', x)
 
 def cot(x):
-	return DuckDBUnary(lambda c: 'cot' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'cot' + '(' + f'{x}' + ')', x)
 
 def degrees(x):
-	return DuckDBUnary(lambda c: 'degrees' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'degrees' + '(' + f'{x}' + ')', x)
 
 def floor(x):
-	return DuckDBUnary(lambda c: 'floor' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'floor' + '(' + f'{x}' + ')', x)
 
 def ln(x):
-	return DuckDBUnary(lambda c: 'ln' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'ln' + '(' + f'{x}' + ')', x)
 
 def log(x):
-	return DuckDBUnary(lambda c: 'log' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'log' + '(' + f'{x}' + ')', x)
 
 def log2(x):
-	return DuckDBUnary(lambda c: 'log2' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'log2' + '(' + f'{x}' + ')', x)
 
-def pi():
-	return DuckDBUnary(lambda c: 'pi' + '(' + c + ')', )
+def pow(x, y):
+	return DuckDBOp(lambda x, y: 'pow' + '(' + f'{x}, {y}' + ')', [x, y])
 
 def radians(x):
-	return DuckDBUnary(lambda c: 'radians' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'radians' + '(' + f'{x}' + ')', x)
+
+def round(v, s):
+	return DuckDBOp(lambda v, s: 'round' + '(' + f'{v}, {s}' + ')', [v, s])
 
 def sin(x):
-	return DuckDBUnary(lambda c: 'sin' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'sin' + '(' + f'{x}' + ')', x)
 
 def sign(x):
-	return DuckDBUnary(lambda c: 'sign' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'sign' + '(' + f'{x}' + ')', x)
 
 def sqrt(x):
-	return DuckDBUnary(lambda c: 'sqrt' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'sqrt' + '(' + f'{x}' + ')', x)
 
 def tan(x):
-	return DuckDBUnary(lambda c: 'tan' + '(' + c + ')', x)
+	return DuckDBOp(lambda x: 'tan' + '(' + f'{x}' + ')', x)
 
 class FastPandas:
 	def __init__(self, dataframe, graph=None):
@@ -139,7 +193,7 @@ class FastPandas:
 
 	def column(self, name):
 		if name in self.dataframe.columns:
-			return FastPandas(self.dataframe, DuckDBUnary(lambda c: c, f'"{name}"'))
+			return FastPandas(self.dataframe, DuckDBOp(lambda c: c, f'"{name}"'))
 		else:
 			raise KeyError(f"{name} not in columns")
 
@@ -153,34 +207,25 @@ class FastPandas:
 		return self.graph.compile()
 
 	def add(self, other):
-		return FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '+' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '+' + str(other) + ')', self.graph))
 
 	def sub(self, other):
-		return FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '-' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '-' + str(other) + ')', self.graph))
 
 	def mul(self, other):
-		return FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '*' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '*' + str(other) + ')', self.graph))
 
 	def div(self, other):
-		return FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '/' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '/' + str(other) + ')', self.graph))
 
 	def mod(self, other):
-		return FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '%' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '%' + str(other) + ')', self.graph))
 
 	def lshift(self, other):
-		return FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '<<' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '<<' + str(other) + ')', self.graph))
 
 	def rshift(self, other):
-		return FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '>>' + str(other) + ')', self.graph))
-
-	def _and(self, other):
-		return FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '&' + str(other) + ')', self.graph))
-
-	def _or(self, other):
-		return FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '|' + str(other) + ')', self.graph))
-
-	def xor(self, other):
-		return FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '#' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '>>' + str(other) + ')', self.graph))
 
 	def avg(self):
 		return FastPandas(self.dataframe, avg(self.graph))
@@ -224,11 +269,26 @@ class FastPandas:
 	def product(self):
 		return FastPandas(self.dataframe, product(self.graph))
 
+	def string_agg(self,sep):
+		return FastPandas(self.dataframe, string_agg(self.graph,sep))
+
 	def sum(self):
 		return FastPandas(self.dataframe, sum(self.graph))
 
 	def approx_count_distinct(self):
 		return FastPandas(self.dataframe, approx_count_distinct(self.graph))
+
+	def approx_quantile(self,pos):
+		return FastPandas(self.dataframe, approx_quantile(self.graph,pos))
+
+	def reservoir_quantile(self,quantile, sample_size):
+		return FastPandas(self.dataframe, reservoir_quantile(self.graph,quantile, sample_size))
+
+	def corr(self,x):
+		return FastPandas(self.dataframe, corr(self.graph,x))
+
+	def covar_pop(self,x):
+		return FastPandas(self.dataframe, covar_pop(self.graph,x))
 
 	def entropy(self):
 		return FastPandas(self.dataframe, entropy(self.graph))
@@ -238,6 +298,39 @@ class FastPandas:
 
 	def mode(self):
 		return FastPandas(self.dataframe, mode(self.graph))
+
+	def quantile_cont(self,pos):
+		return FastPandas(self.dataframe, quantile_cont(self.graph,pos))
+
+	def quantile_disc(self,pos):
+		return FastPandas(self.dataframe, quantile_disc(self.graph,pos))
+
+	def regr_avgx(self,x):
+		return FastPandas(self.dataframe, regr_avgx(self.graph,x))
+
+	def regr_avgy(self,x):
+		return FastPandas(self.dataframe, regr_avgy(self.graph,x))
+
+	def regr_count(self,x):
+		return FastPandas(self.dataframe, regr_count(self.graph,x))
+
+	def regr_intercept(self,x):
+		return FastPandas(self.dataframe, regr_intercept(self.graph,x))
+
+	def regr_r2(self,x):
+		return FastPandas(self.dataframe, regr_r2(self.graph,x))
+
+	def regr_slope(self,x):
+		return FastPandas(self.dataframe, regr_slope(self.graph,x))
+
+	def regr_sxx(self,x):
+		return FastPandas(self.dataframe, regr_sxx(self.graph,x))
+
+	def regr_sxy(self,x):
+		return FastPandas(self.dataframe, regr_sxy(self.graph,x))
+
+	def regr_syy(self,x):
+		return FastPandas(self.dataframe, regr_syy(self.graph,x))
 
 	def skewness(self):
 		return FastPandas(self.dataframe, skewness(self.graph))
@@ -259,6 +352,9 @@ class FastPandas:
 
 	def acos(self):
 		return FastPandas(self.dataframe, acos(self.graph))
+
+	def atan2(self,y):
+		return FastPandas(self.dataframe, atan2(self.graph,y))
 
 	def bit_count(self):
 		return FastPandas(self.dataframe, bit_count(self.graph))
@@ -293,11 +389,14 @@ class FastPandas:
 	def log2(self):
 		return FastPandas(self.dataframe, log2(self.graph))
 
-	def pi(self):
-		return FastPandas(self.dataframe, pi(self.graph))
+	def pow(self,y):
+		return FastPandas(self.dataframe, pow(self.graph,y))
 
 	def radians(self):
 		return FastPandas(self.dataframe, radians(self.graph))
+
+	def round(self,s):
+		return FastPandas(self.dataframe, round(self.graph,s))
 
 	def sin(self):
 		return FastPandas(self.dataframe, sin(self.graph))

@@ -1,4 +1,3 @@
-# todo take into account functions with more than one parameter
 unary_aggregates = [
     "avg(arg)",
     "bit_and(arg)",
@@ -14,27 +13,28 @@ unary_aggregates = [
     "max(arg)",
     "min(arg)",
     "product(arg)",
-    # "string_agg(arg, sep)",
+    "string_agg(arg, sep)",
     "sum(arg)",
     "approx_count_distinct(x)",
-    # "approx_quantile(x,pos)",
-    # "reservoir_quantile(x,quantile,sample_size=8192)",
-    # "corr(y,x)",
-    # "covar_pop(y,x)",
+    "approx_quantile(x,pos)",
+    # todo account for default args (sample_size is default here)
+    "reservoir_quantile(x,quantile,sample_size)",
+    "corr(y,x)",
+    "covar_pop(y,x)",
     "entropy(x)",
     "kurtosis(x)",
     "mode(x)",
-    # "quantile_cont(x,pos)",
-    # "quantile_disc(x,pos)",
-    # "regr_avgx(y,x)",
-    # "regr_avgy(y,x)",
-    # "regr_count(y,x)",
-    # "regr_intercept(y,x)",
-    # "regr_r2(y,x)",
-    # "regr_slope(y,x)",
-    # "regr_sxx(y,x)",
-    # "regr_sxy(y,x)",
-    # "regr_syy(y,x)",
+    "quantile_cont(x,pos)",
+    "quantile_disc(x,pos)",
+    "regr_avgx(y,x)",
+    "regr_avgy(y,x)",
+    "regr_count(y,x)",
+    "regr_intercept(y,x)",
+    "regr_r2(y,x)",
+    "regr_slope(y,x)",
+    "regr_sxx(y,x)",
+    "regr_sxy(y,x)",
+    "regr_syy(y,x)",
     "skewness(x)",
     "stddev_pop(x)",
     "stddev_samp(x)",
@@ -42,10 +42,11 @@ unary_aggregates = [
     "var_samp(x)",
 ]
 
+# todo account for constants ie pi()
 unary_numerical = [
     "abs(x)",
     "acos(x)",
-    # "atan2(x, y)",
+    "atan2(x, y)",
     "bit_count(x)",
     "cbrt(x)",
     "ceil(x)",
@@ -57,11 +58,11 @@ unary_numerical = [
     "ln(x)",
     "log(x)",
     "log2(x)",
-    "pi()",
-    # "pow(x, y)",
+    # "pi()",
+    "pow(x, y)",
     "radians(x)",
     # "random()",
-    # "round(v numeric, s int)",
+    "round(v, s)",
     # "setseed(x)",
     "sin(x)",
     "sign(x)",
@@ -77,9 +78,6 @@ numerical_ops = [
     ("%", "mod"),
     ("<<", "lshift"),
     (">>", "rshift"),
-    ("&", "_and"),
-    ("|", "_or"),
-    ("#", "xor"),
 ]
 
 
@@ -93,40 +91,67 @@ def parse_func(u="pow(x, y, z)"):
     return name, [parameters.strip() for parameters in parameters]
 
 
+def str_params(list_of_params, brackets=False):
+    if len(list_of_params) == 1:
+        return str(list_of_params[0])
+
+    output = ", ".join([str(param) for param in list_of_params])
+    if brackets:
+        output = "[" + output + "]"
+
+    return output
+
+
+def str_params_with_brackets(list_of_params):
+    return ", ".join(["{" + str(param) + "}" for param in list_of_params])
+
+
+def f_str_params(list_of_params):
+    # given x, y, z
+    # return f'{x}, {y}, {z}'
+    return "f'" + str_params_with_brackets(list_of_params) + "'"
+
+
 def compile_unary(u):
     name, parameters = parse_func(u)
     func_name = "def {}:\n".format(u)
-    func_body = "\treturn DuckDBUnary(lambda c: '{}' + '(' + c + ')', {})\n".format(
-        name, parameters[0]
+    _str_params = str_params(parameters)
+    func_body = "\treturn DuckDBOp(lambda {}: '{}' + '(' + {} + ')', {})\n".format(
+        _str_params, name, f_str_params(parameters), str_params(parameters, True)
     )
     full = func_name + func_body
     return full
 
 
 def add_unary_to_class(u):
-    name, _ = parse_func(u)
-    func_name = "\tdef {}(self):\n".format(name)
-    func_body = f"\t\treturn FastPandas(self.dataframe, {name}(self.graph))"
+    name, parameters = parse_func(u)
+    _str_params = "," + str_params(parameters[1:]) if len(parameters) > 1 else ""
+    func_name = "\tdef {}(self{}):\n".format(name, _str_params)
+    # what if the param is not a primitive? what if its another column?
+    func_body = (
+        f"\t\treturn FastPandas(self.dataframe, {name}(self.graph{_str_params}))"
+    )
     full = func_name + func_body
     return full
 
 
 def compile_numeric_operator(operator, nickname):
     func_name = f"\tdef {nickname}(self, other):\n"
-    func_body = "\t\treturn FastPandas(self.dataframe, DuckDBUnary(lambda c: '(' + c + '{}' + str(other) + ')', self.graph))\n".format(
+    func_body = "\t\treturn FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '{}' + str(other) + ')', self.graph))\n".format(
         operator
     )
     full = func_name + func_body
     return full
 
 
-with open("fast_pandas.py", "w") as f:
-    f.write("from lazy import DuckDBUnary\n\n")
+def compile_all():
+    with open("fast_pandas.py", "w") as f:
+        f.write("from lazy import DuckDBOp\n\n")
 
-    for u in unary:
-        f.write(compile_unary(u) + "\n")
+        for u in unary:
+            f.write(compile_unary(u) + "\n")
 
-    fast_pandas_class = """class FastPandas:
+        fast_pandas_class = """class FastPandas:
 	def __init__(self, dataframe, graph=None):
 		self.dataframe = dataframe
 		self.graph = graph
@@ -136,7 +161,7 @@ with open("fast_pandas.py", "w") as f:
 
 	def column(self, name):
 		if name in self.dataframe.columns:
-			return FastPandas(self.dataframe, DuckDBUnary(lambda c: c, f'"{name}"'))
+			return FastPandas(self.dataframe, DuckDBOp(lambda c: c, f'"{name}"'))
 		else:
 			raise KeyError(f"{name} not in columns")
 
@@ -147,13 +172,15 @@ with open("fast_pandas.py", "w") as f:
 		return self.graph.item(self.dataframe)
 
 	def __repr__(self) -> str:
-		return self.graph.compile()\n
-"""
+		return self.graph.compile()\n\n"""
 
-    f.write(fast_pandas_class)
+        f.write(fast_pandas_class)
 
-    for op, nickname in numerical_ops:
-        f.write(compile_numeric_operator(op, nickname) + "\n")
+        for op, nickname in numerical_ops:
+            f.write(compile_numeric_operator(op, nickname) + "\n")
 
-    for u in unary:
-        f.write(add_unary_to_class(u) + "\n\n")
+        for u in unary:
+            f.write(add_unary_to_class(u) + "\n\n")
+
+
+compile_all()
