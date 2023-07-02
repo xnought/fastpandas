@@ -3,14 +3,26 @@ import duckdb
 
 
 class DuckDBUnary:
-    def __init__(self, func, column):
+    def __init__(self, func, columns):
         self.func = func
-        self.column = column
+        self.columns = columns
 
     def compile(self):
-        if isinstance(self.column, DuckDBUnary):
-            return self.func(self.column.compile())
-        return self.func(self.column)
+        if isinstance(self.columns, list) and (
+            self.columns is not None or len(self.columns) > 0
+        ):
+            compiled = []
+            for c in self.columns:
+                if isinstance(c, DuckDBUnary):
+                    compiled.append(c.compile())
+                else:
+                    compiled.append(c)
+            print(compiled)
+            return self.func(*compiled)
+        else:
+            if isinstance(self.columns, DuckDBUnary):
+                return self.func(self.columns.compile())
+            return self.func(self.columns)
 
     def item(self, _df):
         name = self.compile()
@@ -78,5 +90,7 @@ class FastPandas:
 
 if __name__ == "__main__":
     df = pd.DataFrame({"a": list(range(100_000))})
-    result = FastPandas(df)["a"].add(25).mult(2).avg()
-    print(result, result.item())
+    atom = DuckDBUnary(
+        lambda a, b,: f"pow({a}, {b})", [DuckDBUnary(lambda x: f"{x}*2", ["a"]), 2]
+    )
+    print(atom.compile())
