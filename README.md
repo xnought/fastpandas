@@ -58,6 +58,6 @@ large_df = pd.DataFrame({"a": random.choices(range(35_000_000), k=100_000_000)})
 Then easily use a [DuckDB Aggregate](https://duckdb.org/docs/archive/0.2.9/sql/aggregates) function like `approx_count_distinct` to count the number of unique elements in the column (roughly).
 
 ```python
-unique_elements = FastPandas(large_df)["a"].approx_count_distinct().item()
-print(unique_elements) # uses hyperloglog under the hood and took 0.1 seconds
+unique_elements = FastPandas(large_df)["a"].approx_count_distinct()
+print(unique_elements.item()) # uses hyperloglog under the hood and took 0.1 seconds
 ```
