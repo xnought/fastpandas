@@ -8,7 +8,7 @@ Includes tons of
 -   [aggregate functions (statistical, approximate, and more)](https://duckdb.org/docs/archive/0.2.9/sql/aggregates)
 -   [filtering](https://duckdb.org/docs/archive/0.2.9/sql/expressions/comparison_operators)
 
-To find the exact functions, go to the compiled code [`fastpandas.py`](fastpandas.py).
+To find the exact functions, go to the [`compiled code`](fastpandas/__init__.py).
 
 ## What is the library? And why lazy?
 

@@ -1,5 +1,5 @@
 import duckdb
-from lazy import DuckDBOp
+from .lazy import DuckDBOp
 
 def avg(arg):
 	return DuckDBOp(lambda arg: 'avg' + '(' + f'{arg}' + ')', arg)

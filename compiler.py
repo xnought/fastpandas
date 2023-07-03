@@ -169,9 +169,9 @@ def compile_where_connectives(operator, nickname):
 
 
 def compile_all():
-    with open("fastpandas.py", "w") as f:
+    with open("fastpandas/__init__.py", "w") as f:
         f.write("import duckdb\n")
-        f.write("from lazy import DuckDBOp\n\n")
+        f.write("from .lazy import DuckDBOp\n\n")
 
         for u in unary:
             f.write(compile_unary(u) + "\n")
