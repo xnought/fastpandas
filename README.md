@@ -52,7 +52,7 @@ Check out [`example.ipynb`](example.ipynb) for real examples you can run through
 ```bash
 git clone https://github.com/xnought/fastpandas.git
 cd fastpandas
-pip3 install -r requirements.txt
+python3 -m pip install -e .
 ```
 
 **Lazy Evaluation**
