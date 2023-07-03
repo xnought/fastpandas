@@ -64,6 +64,8 @@ print(output.item())
 #  5.5
 ```
 
+If you would rather output the entire dataframe (ie you never applied an aggregate function), use `.df()` instead of `.item()`.
+
 **Or if you have more complex operations**
 
 Like if I wanted to multiply two columns, then absolute value the result, then add 1, then compute the entropy of that column, I could do
