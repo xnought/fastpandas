@@ -1,19 +1,20 @@
 # FastPandas
 
-Lazy evaluation with DuckDB for lighting fast pandas functions. Scales to hundreds of millions of data in fractions of a second! 
+Lazy evaluation with DuckDB for lighting fast pandas functions. Scales to hundreds of millions of data in fractions of a second!
 
 Includes tons of
-- [numeric functions](https://duckdb.org/docs/archive/0.2.9/sql/functions/numeric)
-- [aggregate functions (statistical, approximate, and more)](https://duckdb.org/docs/archive/0.2.9/sql/aggregates)
-- [filtering](https://duckdb.org/docs/archive/0.2.9/sql/expressions/comparison_operators)
 
-To find the exact functions, go to the compiled code [`fast_pandas.py`](fast_pandas.py).
+-   [numeric functions](https://duckdb.org/docs/archive/0.2.9/sql/functions/numeric)
+-   [aggregate functions (statistical, approximate, and more)](https://duckdb.org/docs/archive/0.2.9/sql/aggregates)
+-   [filtering](https://duckdb.org/docs/archive/0.2.9/sql/expressions/comparison_operators)
+
+To find the exact functions, go to the compiled code [`fastpandas.py`](fastpandas.py).
 
 ## What is the library? And why lazy?
 
 DuckDB runs SQL and is extremely fast. Like really really really fast.
 
-This library makes it easy to run DuckDB on your pandas dataframes. 
+This library makes it easy to run DuckDB on your pandas dataframes.
 
 It works by selecting a column in your dataframe `df`
 
@@ -49,9 +50,9 @@ Check out [`example.ipynb`](example.ipynb) for real examples you can run through
 **Installation**
 
 ```bash
-git clone https://github.com/xnought/FastPandas.git
-cd FastPandas
-python3 -m pip install -e .
+git clone https://github.com/xnought/fastpandas.git
+cd fastpandas
+pip3 install -r requirements.txt
 ```
 
 **Lazy Evaluation**
@@ -61,7 +62,7 @@ FastPandas is lazy. Meaning you chain your desired operations, and the value is 
 For example, to average over the dataframes "a" column you could do
 
 ```python
-from fast_pandas import FastPandas
+from fastpandas import FastPandas
 
 df = pd.DataFrame({'a': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]})
 

@@ -169,7 +169,7 @@ def compile_where_connectives(operator, nickname):
 
 
 def compile_all():
-    with open("fast_pandas.py", "w") as f:
+    with open("fastpandas.py", "w") as f:
         f.write("import duckdb\n")
         f.write("from lazy import DuckDBOp\n\n")
 
