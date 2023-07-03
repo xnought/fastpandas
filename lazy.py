@@ -23,14 +23,23 @@ class DuckDBOp:
                 return self.func(self.columns.compile())
             return self.func(self.columns)
 
+    def compile_where(self):
+        return ""
+
     def item(self, _df):
+        where = self.compile_where()
         name = self.compile()
         query = f"""SELECT {name} as result from _df"""
+        if where != "":
+            query += f" WHERE {where}"
         return duckdb.query(query).df()["result"][0]
 
     def df(self, _df):
+        where = self.compile_where()
         name = self.compile()
         query = f"""SELECT {name} from _df"""
+        if where != "":
+            query += f" WHERE {where}"
         return duckdb.query(query).df()
 
 

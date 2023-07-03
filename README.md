@@ -61,3 +61,11 @@ Then easily use a [DuckDB Aggregate](https://duckdb.org/docs/archive/0.2.9/sql/a
 unique_elements = FastPandas(large_df)["a"].approx_count_distinct()
 print(unique_elements.item()) # uses hyperloglog under the hood and took 0.1 seconds
 ```
+
+**Filtering**
+
+If you want to also filter down, you can do that. Note that the last `.filter()` will be the only one applied. (TODO fix this)
+
+```python
+FastPandas(large_df)["a"].filter(FastPandas(large_df)["a"].gt(1)).sum().item()
+```
