@@ -80,6 +80,22 @@ numerical_ops = [
     (">>", "rshift"),
 ]
 
+where_ops = [
+    (">", "gt"),
+    (">=", "gte"),
+    ("<", "lt"),
+    ("<=", "lte"),
+    ("=", "eq"),
+    ("!=", "neq"),
+]
+
+where_connectives = [
+    ("and", "_and"),
+    ("or", "_or"),
+    ("is", "_is"),
+    ("is not", "_is_not"),
+]
+
 
 unary = [*unary_aggregates, *unary_numerical]
 
@@ -129,7 +145,7 @@ def add_unary_to_class(u):
     func_name = "\tdef {}(self{}):\n".format(name, _str_params)
     # what if the param is not a primitive? what if its another column?
     func_body = (
-        f"\t\treturn FastPandas(self.dataframe, {name}(self.graph{_str_params}))"
+        f"\t\treturn FastPandas(self.dataframe, {name}(self.graph{_str_params}), self.where)"
     )
     full = func_name + func_body
     return full
@@ -137,24 +153,34 @@ def add_unary_to_class(u):
 
 def compile_numeric_operator(operator, nickname):
     func_name = f"\tdef {nickname}(self, other):\n"
-    func_body = "\t\treturn FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '{}' + str(other) + ')', self.graph))\n".format(
+    func_body = "\t\treturn FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '{}' + str(other) + ')', self.graph), self.where)\n".format(
         operator
     )
     full = func_name + func_body
     return full
 
 
+def compile_where(operator, nickname):
+    return compile_numeric_operator(operator, nickname)
+
+
+def compile_where_connectives(operator, nickname):
+    return compile_numeric_operator(operator, nickname)
+
+
 def compile_all():
     with open("fast_pandas.py", "w") as f:
+        f.write("import duckdb\n")
         f.write("from lazy import DuckDBOp\n\n")
 
         for u in unary:
             f.write(compile_unary(u) + "\n")
 
         fast_pandas_class = """class FastPandas:
-	def __init__(self, dataframe, graph=None):
+	def __init__(self, dataframe, graph=None, where=None):
 		self.dataframe = dataframe
 		self.graph = graph
+		self.where = where
 
 	def __getitem__(self, item):
 		return self.column(item)
@@ -165,19 +191,54 @@ def compile_all():
 		else:
 			raise KeyError(f"{name} not in columns")
 
-	def df(self):
-		return self.graph.df(self.dataframe)
+
+	def filter(self, condition: "FastPandas"):
+		return FastPandas(self.dataframe, self.graph, DuckDBOp(lambda x: x, condition))
 
 	def item(self):
-		return self.graph.item(self.dataframe)
+		_df = self.dataframe
+		name = self.graph.compile()
+		where_clause = ""
+		if self.where is not None:
+			where_clause = self.where.compile()
+
+		query = f"SELECT {name} as result from _df"
+
+		if where_clause != "":
+			query += f" WHERE {where_clause}"
+
+		return duckdb.query(query).df()["result"][0]
+
+	def df(self):
+		_df = self.dataframe
+		name = self.graph.compile()
+		where_clause = ""
+		if self.where is not None:
+			where_clause = self.where.compile()
+
+		query = f"SELECT {name} from _df"
+
+		if where_clause != "":
+			query += f" WHERE {where_clause}"
+
+		return duckdb.query(query).df()
 
 	def __repr__(self) -> str:
-		return self.graph.compile()\n\n"""
+		output = self.graph.compile()
+		if self.where is not None:
+			output += f" WHERE {self.where.compile()}"
+		return output\n\n"""
 
         f.write(fast_pandas_class)
 
         for op, nickname in numerical_ops:
             f.write(compile_numeric_operator(op, nickname) + "\n")
+
+        for op, nickname in where_ops:
+            f.write(compile_where(op, nickname) + "\n")
+
+        for op, nickname in where_connectives:
+            f.write(compile_where_connectives(op, nickname) + "\n")
 
         for u in unary:
             f.write(add_unary_to_class(u) + "\n\n")

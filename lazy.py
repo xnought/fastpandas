@@ -23,15 +23,9 @@ class DuckDBOp:
                 return self.func(self.columns.compile())
             return self.func(self.columns)
 
-    def compile_where(self):
-        return ""
-
     def item(self, _df):
-        where = self.compile_where()
         name = self.compile()
         query = f"""SELECT {name} as result from _df"""
-        if where != "":
-            query += f" WHERE {where}"
         return duckdb.query(query).df()["result"][0]
 
     def df(self, _df):
@@ -46,5 +40,7 @@ class DuckDBOp:
 if __name__ == "__main__":
     df = pd.DataFrame({"a": list(range(100_000))})
     atom = DuckDBOp(
-        lambda a, b,: f"pow({a}, {b})", [DuckDBOp(lambda x: f"{x}*2", ["a"]), 2]
+        lambda a, b,: f"pow({a}, {b})",
+        [DuckDBOp(lambda x: f"{x}*2", ["a"], is_where=True), 2],
     )
+    test = DuckDBOp(lambda a, b: f"pow({a}, {b})", [atom, 2]).item(df)

@@ -64,8 +64,24 @@ print(unique_elements.item()) # uses hyperloglog under the hood and took 0.1 sec
 
 **Filtering**
 
-If you want to also filter down, you can do that. Note that the last `.filter()` will be the only one applied. (TODO fix this)
+If you want to also filter down, you can do that. Note that the last `.filter()` will be the only one applied.
+
+For example, if I want all the values in column "a" that are greater than 1 and summed up, I could do
 
 ```python
 FastPandas(large_df)["a"].filter(FastPandas(large_df)["a"].gt(1)).sum().item()
+```
+
+If I wanted all the values less than 0 and greater than 1 summed up, I could do
+
+```python
+_filter = FastPandas(large_df)["a"].lt(0)._and(FastPandas(large_df)["a"].gt(1))
+FastPandas(large_df)["a"].filter(_filter).sum().item()
+```
+
+Or going back to the counting unique elements if I wanted to counted the number of unique elements between 0 and 10,
+
+```python
+between_0_and_10 = FastPandas(large_df)["a"].gte(0)._and(FastPandas(large_df)["b"].lte(10))
+FastPandas(large_df)["a"].filter(between_0_and_10).approx_count_distinct().item()
 ```

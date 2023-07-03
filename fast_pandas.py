@@ -1,3 +1,4 @@
+import duckdb
 from lazy import DuckDBOp
 
 def avg(arg):
@@ -184,9 +185,10 @@ def tan(x):
 	return DuckDBOp(lambda x: 'tan' + '(' + f'{x}' + ')', x)
 
 class FastPandas:
-	def __init__(self, dataframe, graph=None):
+	def __init__(self, dataframe, graph=None, where=None):
 		self.dataframe = dataframe
 		self.graph = graph
+		self.where = where
 
 	def __getitem__(self, item):
 		return self.column(item)
@@ -197,216 +199,275 @@ class FastPandas:
 		else:
 			raise KeyError(f"{name} not in columns")
 
-	def df(self):
-		return self.graph.df(self.dataframe)
+
+	def filter(self, condition: "FastPandas"):
+		return FastPandas(self.dataframe, self.graph, DuckDBOp(lambda x: x, condition))
 
 	def item(self):
-		return self.graph.item(self.dataframe)
+		_df = self.dataframe
+		name = self.graph.compile()
+		where_clause = ""
+		if self.where is not None:
+			where_clause = self.where.compile()
+
+		query = f"SELECT {name} as result from _df"
+
+		if where_clause != "":
+			query += f" WHERE {where_clause}"
+
+		return duckdb.query(query).df()["result"][0]
+
+	def df(self):
+		_df = self.dataframe
+		name = self.graph.compile()
+		where_clause = ""
+		if self.where is not None:
+			where_clause = self.where.compile()
+
+		query = f"SELECT {name} from _df"
+
+		if where_clause != "":
+			query += f" WHERE {where_clause}"
+
+		return duckdb.query(query).df()
 
 	def __repr__(self) -> str:
-		return self.graph.compile()
+		output = self.graph.compile()
+		if self.where is not None:
+			output += f" WHERE {self.where.compile()}"
+		return output
 
 	def add(self, other):
-		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '+' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '+' + str(other) + ')', self.graph), self.where)
 
 	def sub(self, other):
-		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '-' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '-' + str(other) + ')', self.graph), self.where)
 
 	def mul(self, other):
-		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '*' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '*' + str(other) + ')', self.graph), self.where)
 
 	def div(self, other):
-		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '/' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '/' + str(other) + ')', self.graph), self.where)
 
 	def mod(self, other):
-		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '%' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '%' + str(other) + ')', self.graph), self.where)
 
 	def lshift(self, other):
-		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '<<' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '<<' + str(other) + ')', self.graph), self.where)
 
 	def rshift(self, other):
-		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '>>' + str(other) + ')', self.graph))
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '>>' + str(other) + ')', self.graph), self.where)
+
+	def gt(self, other):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '>' + str(other) + ')', self.graph), self.where)
+
+	def gte(self, other):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '>=' + str(other) + ')', self.graph), self.where)
+
+	def lt(self, other):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '<' + str(other) + ')', self.graph), self.where)
+
+	def lte(self, other):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '<=' + str(other) + ')', self.graph), self.where)
+
+	def eq(self, other):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '=' + str(other) + ')', self.graph), self.where)
+
+	def neq(self, other):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '!=' + str(other) + ')', self.graph), self.where)
+
+	def _and(self, other):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + 'and' + str(other) + ')', self.graph), self.where)
+
+	def _or(self, other):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + 'or' + str(other) + ')', self.graph), self.where)
+
+	def _is(self, other):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + 'is' + str(other) + ')', self.graph), self.where)
+
+	def _is_not(self, other):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + 'is not' + str(other) + ')', self.graph), self.where)
 
 	def avg(self):
-		return FastPandas(self.dataframe, avg(self.graph))
+		return FastPandas(self.dataframe, avg(self.graph), self.where)
 
 	def bit_and(self):
-		return FastPandas(self.dataframe, bit_and(self.graph))
+		return FastPandas(self.dataframe, bit_and(self.graph), self.where)
 
 	def bit_or(self):
-		return FastPandas(self.dataframe, bit_or(self.graph))
+		return FastPandas(self.dataframe, bit_or(self.graph), self.where)
 
 	def bit_xor(self):
-		return FastPandas(self.dataframe, bit_xor(self.graph))
+		return FastPandas(self.dataframe, bit_xor(self.graph), self.where)
 
 	def bool_and(self):
-		return FastPandas(self.dataframe, bool_and(self.graph))
+		return FastPandas(self.dataframe, bool_and(self.graph), self.where)
 
 	def bool_or(self):
-		return FastPandas(self.dataframe, bool_or(self.graph))
+		return FastPandas(self.dataframe, bool_or(self.graph), self.where)
 
 	def count(self):
-		return FastPandas(self.dataframe, count(self.graph))
+		return FastPandas(self.dataframe, count(self.graph), self.where)
 
 	def first(self):
-		return FastPandas(self.dataframe, first(self.graph))
+		return FastPandas(self.dataframe, first(self.graph), self.where)
 
 	def histogram(self):
-		return FastPandas(self.dataframe, histogram(self.graph))
+		return FastPandas(self.dataframe, histogram(self.graph), self.where)
 
 	def last(self):
-		return FastPandas(self.dataframe, last(self.graph))
+		return FastPandas(self.dataframe, last(self.graph), self.where)
 
 	def list(self):
-		return FastPandas(self.dataframe, list(self.graph))
+		return FastPandas(self.dataframe, list(self.graph), self.where)
 
 	def max(self):
-		return FastPandas(self.dataframe, max(self.graph))
+		return FastPandas(self.dataframe, max(self.graph), self.where)
 
 	def min(self):
-		return FastPandas(self.dataframe, min(self.graph))
+		return FastPandas(self.dataframe, min(self.graph), self.where)
 
 	def product(self):
-		return FastPandas(self.dataframe, product(self.graph))
+		return FastPandas(self.dataframe, product(self.graph), self.where)
 
 	def string_agg(self,sep):
-		return FastPandas(self.dataframe, string_agg(self.graph,sep))
+		return FastPandas(self.dataframe, string_agg(self.graph,sep), self.where)
 
 	def sum(self):
-		return FastPandas(self.dataframe, sum(self.graph))
+		return FastPandas(self.dataframe, sum(self.graph), self.where)
 
 	def approx_count_distinct(self):
-		return FastPandas(self.dataframe, approx_count_distinct(self.graph))
+		return FastPandas(self.dataframe, approx_count_distinct(self.graph), self.where)
 
 	def approx_quantile(self,pos):
-		return FastPandas(self.dataframe, approx_quantile(self.graph,pos))
+		return FastPandas(self.dataframe, approx_quantile(self.graph,pos), self.where)
 
 	def reservoir_quantile(self,quantile, sample_size):
-		return FastPandas(self.dataframe, reservoir_quantile(self.graph,quantile, sample_size))
+		return FastPandas(self.dataframe, reservoir_quantile(self.graph,quantile, sample_size), self.where)
 
 	def corr(self,x):
-		return FastPandas(self.dataframe, corr(self.graph,x))
+		return FastPandas(self.dataframe, corr(self.graph,x), self.where)
 
 	def covar_pop(self,x):
-		return FastPandas(self.dataframe, covar_pop(self.graph,x))
+		return FastPandas(self.dataframe, covar_pop(self.graph,x), self.where)
 
 	def entropy(self):
-		return FastPandas(self.dataframe, entropy(self.graph))
+		return FastPandas(self.dataframe, entropy(self.graph), self.where)
 
 	def kurtosis(self):
-		return FastPandas(self.dataframe, kurtosis(self.graph))
+		return FastPandas(self.dataframe, kurtosis(self.graph), self.where)
 
 	def mode(self):
-		return FastPandas(self.dataframe, mode(self.graph))
+		return FastPandas(self.dataframe, mode(self.graph), self.where)
 
 	def quantile_cont(self,pos):
-		return FastPandas(self.dataframe, quantile_cont(self.graph,pos))
+		return FastPandas(self.dataframe, quantile_cont(self.graph,pos), self.where)
 
 	def quantile_disc(self,pos):
-		return FastPandas(self.dataframe, quantile_disc(self.graph,pos))
+		return FastPandas(self.dataframe, quantile_disc(self.graph,pos), self.where)
 
 	def regr_avgx(self,x):
-		return FastPandas(self.dataframe, regr_avgx(self.graph,x))
+		return FastPandas(self.dataframe, regr_avgx(self.graph,x), self.where)
 
 	def regr_avgy(self,x):
-		return FastPandas(self.dataframe, regr_avgy(self.graph,x))
+		return FastPandas(self.dataframe, regr_avgy(self.graph,x), self.where)
 
 	def regr_count(self,x):
-		return FastPandas(self.dataframe, regr_count(self.graph,x))
+		return FastPandas(self.dataframe, regr_count(self.graph,x), self.where)
 
 	def regr_intercept(self,x):
-		return FastPandas(self.dataframe, regr_intercept(self.graph,x))
+		return FastPandas(self.dataframe, regr_intercept(self.graph,x), self.where)
 
 	def regr_r2(self,x):
-		return FastPandas(self.dataframe, regr_r2(self.graph,x))
+		return FastPandas(self.dataframe, regr_r2(self.graph,x), self.where)
 
 	def regr_slope(self,x):
-		return FastPandas(self.dataframe, regr_slope(self.graph,x))
+		return FastPandas(self.dataframe, regr_slope(self.graph,x), self.where)
 
 	def regr_sxx(self,x):
-		return FastPandas(self.dataframe, regr_sxx(self.graph,x))
+		return FastPandas(self.dataframe, regr_sxx(self.graph,x), self.where)
 
 	def regr_sxy(self,x):
-		return FastPandas(self.dataframe, regr_sxy(self.graph,x))
+		return FastPandas(self.dataframe, regr_sxy(self.graph,x), self.where)
 
 	def regr_syy(self,x):
-		return FastPandas(self.dataframe, regr_syy(self.graph,x))
+		return FastPandas(self.dataframe, regr_syy(self.graph,x), self.where)
 
 	def skewness(self):
-		return FastPandas(self.dataframe, skewness(self.graph))
+		return FastPandas(self.dataframe, skewness(self.graph), self.where)
 
 	def stddev_pop(self):
-		return FastPandas(self.dataframe, stddev_pop(self.graph))
+		return FastPandas(self.dataframe, stddev_pop(self.graph), self.where)
 
 	def stddev_samp(self):
-		return FastPandas(self.dataframe, stddev_samp(self.graph))
+		return FastPandas(self.dataframe, stddev_samp(self.graph), self.where)
 
 	def var_pop(self):
-		return FastPandas(self.dataframe, var_pop(self.graph))
+		return FastPandas(self.dataframe, var_pop(self.graph), self.where)
 
 	def var_samp(self):
-		return FastPandas(self.dataframe, var_samp(self.graph))
+		return FastPandas(self.dataframe, var_samp(self.graph), self.where)
 
 	def abs(self):
-		return FastPandas(self.dataframe, abs(self.graph))
+		return FastPandas(self.dataframe, abs(self.graph), self.where)
 
 	def acos(self):
-		return FastPandas(self.dataframe, acos(self.graph))
+		return FastPandas(self.dataframe, acos(self.graph), self.where)
 
 	def atan2(self,y):
-		return FastPandas(self.dataframe, atan2(self.graph,y))
+		return FastPandas(self.dataframe, atan2(self.graph,y), self.where)
 
 	def bit_count(self):
-		return FastPandas(self.dataframe, bit_count(self.graph))
+		return FastPandas(self.dataframe, bit_count(self.graph), self.where)
 
 	def cbrt(self):
-		return FastPandas(self.dataframe, cbrt(self.graph))
+		return FastPandas(self.dataframe, cbrt(self.graph), self.where)
 
 	def ceil(self):
-		return FastPandas(self.dataframe, ceil(self.graph))
+		return FastPandas(self.dataframe, ceil(self.graph), self.where)
 
 	def chr(self):
-		return FastPandas(self.dataframe, chr(self.graph))
+		return FastPandas(self.dataframe, chr(self.graph), self.where)
 
 	def cos(self):
-		return FastPandas(self.dataframe, cos(self.graph))
+		return FastPandas(self.dataframe, cos(self.graph), self.where)
 
 	def cot(self):
-		return FastPandas(self.dataframe, cot(self.graph))
+		return FastPandas(self.dataframe, cot(self.graph), self.where)
 
 	def degrees(self):
-		return FastPandas(self.dataframe, degrees(self.graph))
+		return FastPandas(self.dataframe, degrees(self.graph), self.where)
 
 	def floor(self):
-		return FastPandas(self.dataframe, floor(self.graph))
+		return FastPandas(self.dataframe, floor(self.graph), self.where)
 
 	def ln(self):
-		return FastPandas(self.dataframe, ln(self.graph))
+		return FastPandas(self.dataframe, ln(self.graph), self.where)
 
 	def log(self):
-		return FastPandas(self.dataframe, log(self.graph))
+		return FastPandas(self.dataframe, log(self.graph), self.where)
 
 	def log2(self):
-		return FastPandas(self.dataframe, log2(self.graph))
+		return FastPandas(self.dataframe, log2(self.graph), self.where)
 
 	def pow(self,y):
-		return FastPandas(self.dataframe, pow(self.graph,y))
+		return FastPandas(self.dataframe, pow(self.graph,y), self.where)
 
 	def radians(self):
-		return FastPandas(self.dataframe, radians(self.graph))
+		return FastPandas(self.dataframe, radians(self.graph), self.where)
 
 	def round(self,s):
-		return FastPandas(self.dataframe, round(self.graph,s))
+		return FastPandas(self.dataframe, round(self.graph,s), self.where)
 
 	def sin(self):
-		return FastPandas(self.dataframe, sin(self.graph))
+		return FastPandas(self.dataframe, sin(self.graph), self.where)
 
 	def sign(self):
-		return FastPandas(self.dataframe, sign(self.graph))
+		return FastPandas(self.dataframe, sign(self.graph), self.where)
 
 	def sqrt(self):
-		return FastPandas(self.dataframe, sqrt(self.graph))
+		return FastPandas(self.dataframe, sqrt(self.graph), self.where)
 
 	def tan(self):
-		return FastPandas(self.dataframe, tan(self.graph))
+		return FastPandas(self.dataframe, tan(self.graph), self.where)
 
