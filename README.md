@@ -1,12 +1,46 @@
 # FastPandas
 
-Extremely fast functions for pandas dataframes built on top of DuckDB.
+Lazy evaluation with DuckDB for lighting fast pandas functions. Scales to hundreds of millions of data in fractions of a second! 
 
-This library is so low effort, I have to tell more. I literally compile SQL DuckDB queries into a high level API thats easy to use with pandas.
+Includes tons of
+- [numeric functions](https://duckdb.org/docs/archive/0.2.9/sql/functions/numeric)
+- [aggregate functions (statistical, approximate, and more)](https://duckdb.org/docs/archive/0.2.9/sql/aggregates)
+- [filtering](https://duckdb.org/docs/archive/0.2.9/sql/expressions/comparison_operators)
 
-Most of the aggregate and numeric functions are supported. Please check out the [DuckDB docs](https://duckdb.org/docs/sql) for more information. Or check out the compiled code at [`fast_pandas.py`](fast_pandas.py).
+To find the exact functions, go to the compiled code [`fast_pandas.py`](fast_pandas.py).
 
-Anything listed on the [DuckDB Numeric docs](https://duckdb.org/docs/archive/0.2.9/sql/functions/numeric) and [DuckDB Aggregate docs](https://duckdb.org/docs/archive/0.2.9/sql/aggregates) is supported including nice statistical functions that scale to large amounts of data.
+## What is the library? And why lazy?
+
+DuckDB runs SQL and is extremely fast. Like really really really fast.
+
+This library makes it easy to run DuckDB on your pandas dataframes. 
+
+It works by selecting a column in your dataframe `df`
+
+```python
+df = pd.DataFrame() # with your own data
+FastPandas(df)["column_in_df"]
+```
+
+and applying numeric functions and aggregate functions.
+
+For example taking the natural log, squaring, then averaging.
+
+```python
+df = pd.DataFrame() # with your own data
+output = FastPandas(df)["column_in_df"].ln().pow(2).avg()
+```
+
+But nothing is computed yet! Only when you need the value, the entire chain is fused together, then executed all at once
+
+```python
+df = pd.DataFrame() # with your own data
+output = FastPandas(df)["column_in_df"].ln().pow(2).avg() # not executed yet
+
+print(output.item()) # not gets executed with .item()
+```
+
+There is no need to compute them separetly, then combine. Just run'em all at once! We love being lazy!
 
 ## Usage
 
