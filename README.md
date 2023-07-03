@@ -45,9 +45,11 @@ There is no need to compute them separetly, then combine. Just run'em all at onc
 
 ## Usage
 
-Check out [`example.ipynb`](example.ipynb) for real examples you can run through or continue. Or <a target="_blank" href="https://colab.research.google.com/github/https://colab.research.google.com/drive/1oMIIEzl6nl4OVXxaXd9gOnyYg2omh-9X?usp=sharing">
+Check out [`example.ipynb`](example.ipynb) for real examples you can run through or continue. 
+
+<a target="_blank" href="https://colab.research.google.com/drive/1oMIIEzl6nl4OVXxaXd9gOnyYg2omh-9X?usp=sharing">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>.
+</a>
 
 **Installation**
 
