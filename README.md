@@ -37,7 +37,7 @@ But nothing is computed yet! Only when you need the value, the entire chain is f
 df = pd.DataFrame() # with your own data
 output = FastPandas(df)["column_in_df"].ln().pow(2).avg() # not executed yet
 
-print(output.item()) # not gets executed with .item()
+print(output.item()) # NOW gets executed with .item()
 ```
 
 There is no need to compute them separetly, then combine. Just run'em all at once! We love being lazy!
