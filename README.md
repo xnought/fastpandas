@@ -44,9 +44,15 @@ There is no need to compute them separetly, then combine. Just run'em all at onc
 
 ## Usage
 
-Check out [`example.ipynb`](example.ipynb) for real examples you can run through.
+Check out [`example.ipynb`](example.ipynb) for real examples you can run through or continue.
 
-Or stay here.
+**Installation**
+
+```bash
+git clone https://github.com/xnought/FastPandas.git
+cd FastPandas
+python3 -m pip install -e .
+```
 
 **Lazy Evaluation**
 
