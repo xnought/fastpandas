@@ -127,6 +127,12 @@ def abs(x):
 def acos(x):
 	return DuckDBOp(lambda x: 'acos' + '(' + f'{x}' + ')', x)
 
+def asin(x):
+	return DuckDBOp(lambda x: 'asin' + '(' + f'{x}' + ')', x)
+
+def atan(x):
+	return DuckDBOp(lambda x: 'atan' + '(' + f'{x}' + ')', x)
+
 def atan2(x, y):
 	return DuckDBOp(lambda x, y: 'atan2' + '(' + f'{x}, {y}' + ')', [x, y])
 
@@ -139,8 +145,8 @@ def cbrt(x):
 def ceil(x):
 	return DuckDBOp(lambda x: 'ceil' + '(' + f'{x}' + ')', x)
 
-def chr(x):
-	return DuckDBOp(lambda x: 'chr' + '(' + f'{x}' + ')', x)
+def ceiling(x):
+	return DuckDBOp(lambda x: 'ceiling' + '(' + f'{x}' + ')', x)
 
 def cos(x):
 	return DuckDBOp(lambda x: 'cos' + '(' + f'{x}' + ')', x)
@@ -151,8 +157,41 @@ def cot(x):
 def degrees(x):
 	return DuckDBOp(lambda x: 'degrees' + '(' + f'{x}' + ')', x)
 
+def even(x):
+	return DuckDBOp(lambda x: 'even' + '(' + f'{x}' + ')', x)
+
+def factorial(x):
+	return DuckDBOp(lambda x: 'factorial' + '(' + f'{x}' + ')', x)
+
 def floor(x):
 	return DuckDBOp(lambda x: 'floor' + '(' + f'{x}' + ')', x)
+
+def gamma(x):
+	return DuckDBOp(lambda x: 'gamma' + '(' + f'{x}' + ')', x)
+
+def gcd(x, y):
+	return DuckDBOp(lambda x, y: 'gcd' + '(' + f'{x}, {y}' + ')', [x, y])
+
+def greatest_common_divisor(x, y):
+	return DuckDBOp(lambda x, y: 'greatest_common_divisor' + '(' + f'{x}, {y}' + ')', [x, y])
+
+def isfinite(x):
+	return DuckDBOp(lambda x: 'isfinite' + '(' + f'{x}' + ')', x)
+
+def isinf(x):
+	return DuckDBOp(lambda x: 'isinf' + '(' + f'{x}' + ')', x)
+
+def isnan(x):
+	return DuckDBOp(lambda x: 'isnan' + '(' + f'{x}' + ')', x)
+
+def lcm(x, y):
+	return DuckDBOp(lambda x, y: 'lcm' + '(' + f'{x}, {y}' + ')', [x, y])
+
+def least_common_multiple(x, y):
+	return DuckDBOp(lambda x, y: 'least_common_multiple' + '(' + f'{x}, {y}' + ')', [x, y])
+
+def lgamma(x):
+	return DuckDBOp(lambda x: 'lgamma' + '(' + f'{x}' + ')', x)
 
 def ln(x):
 	return DuckDBOp(lambda x: 'ln' + '(' + f'{x}' + ')', x)
@@ -163,8 +202,17 @@ def log(x):
 def log2(x):
 	return DuckDBOp(lambda x: 'log2' + '(' + f'{x}' + ')', x)
 
+def log10(x):
+	return DuckDBOp(lambda x: 'log10' + '(' + f'{x}' + ')', x)
+
+def nextafter(x, y):
+	return DuckDBOp(lambda x, y: 'nextafter' + '(' + f'{x}, {y}' + ')', [x, y])
+
 def pow(x, y):
 	return DuckDBOp(lambda x, y: 'pow' + '(' + f'{x}, {y}' + ')', [x, y])
+
+def power(x, y):
+	return DuckDBOp(lambda x, y: 'power' + '(' + f'{x}, {y}' + ')', [x, y])
 
 def radians(x):
 	return DuckDBOp(lambda x: 'radians' + '(' + f'{x}' + ')', x)
@@ -172,14 +220,23 @@ def radians(x):
 def round(v, s):
 	return DuckDBOp(lambda v, s: 'round' + '(' + f'{v}, {s}' + ')', [v, s])
 
+def setseed(x):
+	return DuckDBOp(lambda x: 'setseed' + '(' + f'{x}' + ')', x)
+
 def sin(x):
 	return DuckDBOp(lambda x: 'sin' + '(' + f'{x}' + ')', x)
 
 def sign(x):
 	return DuckDBOp(lambda x: 'sign' + '(' + f'{x}' + ')', x)
 
+def signbit(x):
+	return DuckDBOp(lambda x: 'signbit' + '(' + f'{x}' + ')', x)
+
 def sqrt(x):
 	return DuckDBOp(lambda x: 'sqrt' + '(' + f'{x}' + ')', x)
+
+def xor(x):
+	return DuckDBOp(lambda x: 'xor' + '(' + f'{x}' + ')', x)
 
 def tan(x):
 	return DuckDBOp(lambda x: 'tan' + '(' + f'{x}' + ')', x)
@@ -287,6 +344,48 @@ class FastPandas:
 
 	def _is_not(self, other):
 		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + 'is not' + str(other) + ')', self.graph), self.where)
+
+	def bigint(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'BIGINT', self.graph), self.where)
+
+	def int(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'INT', self.graph), self.where)
+
+	def tinyint(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'TINYINT', self.graph), self.where)
+
+	def hugeint(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'HUGEINT', self.graph), self.where)
+
+	def smallint(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'SMALLINT', self.graph), self.where)
+
+	def ubigint(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'UBIGINT', self.graph), self.where)
+
+	def uint(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'UINTEGER', self.graph), self.where)
+
+	def utinyint(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'UTINYINT', self.graph), self.where)
+
+	def usmallint(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'USMALLINT', self.graph), self.where)
+
+	def double(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'DOUBLE', self.graph), self.where)
+
+	def bool(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'BOOLEAN', self.graph), self.where)
+
+	def varchar(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'VARCHAR', self.graph), self.where)
+
+	def date(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'DATE', self.graph), self.where)
+
+	def timestamp(self):
+		return FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + 'TIMESTAMP', self.graph), self.where)
 
 	def avg(self):
 		return FastPandas(self.dataframe, avg(self.graph), self.where)
@@ -414,6 +513,12 @@ class FastPandas:
 	def acos(self):
 		return FastPandas(self.dataframe, acos(self.graph), self.where)
 
+	def asin(self):
+		return FastPandas(self.dataframe, asin(self.graph), self.where)
+
+	def atan(self):
+		return FastPandas(self.dataframe, atan(self.graph), self.where)
+
 	def atan2(self,y):
 		return FastPandas(self.dataframe, atan2(self.graph,y), self.where)
 
@@ -426,8 +531,8 @@ class FastPandas:
 	def ceil(self):
 		return FastPandas(self.dataframe, ceil(self.graph), self.where)
 
-	def chr(self):
-		return FastPandas(self.dataframe, chr(self.graph), self.where)
+	def ceiling(self):
+		return FastPandas(self.dataframe, ceiling(self.graph), self.where)
 
 	def cos(self):
 		return FastPandas(self.dataframe, cos(self.graph), self.where)
@@ -438,8 +543,41 @@ class FastPandas:
 	def degrees(self):
 		return FastPandas(self.dataframe, degrees(self.graph), self.where)
 
+	def even(self):
+		return FastPandas(self.dataframe, even(self.graph), self.where)
+
+	def factorial(self):
+		return FastPandas(self.dataframe, factorial(self.graph), self.where)
+
 	def floor(self):
 		return FastPandas(self.dataframe, floor(self.graph), self.where)
+
+	def gamma(self):
+		return FastPandas(self.dataframe, gamma(self.graph), self.where)
+
+	def gcd(self,y):
+		return FastPandas(self.dataframe, gcd(self.graph,y), self.where)
+
+	def greatest_common_divisor(self,y):
+		return FastPandas(self.dataframe, greatest_common_divisor(self.graph,y), self.where)
+
+	def isfinite(self):
+		return FastPandas(self.dataframe, isfinite(self.graph), self.where)
+
+	def isinf(self):
+		return FastPandas(self.dataframe, isinf(self.graph), self.where)
+
+	def isnan(self):
+		return FastPandas(self.dataframe, isnan(self.graph), self.where)
+
+	def lcm(self,y):
+		return FastPandas(self.dataframe, lcm(self.graph,y), self.where)
+
+	def least_common_multiple(self,y):
+		return FastPandas(self.dataframe, least_common_multiple(self.graph,y), self.where)
+
+	def lgamma(self):
+		return FastPandas(self.dataframe, lgamma(self.graph), self.where)
 
 	def ln(self):
 		return FastPandas(self.dataframe, ln(self.graph), self.where)
@@ -450,8 +588,17 @@ class FastPandas:
 	def log2(self):
 		return FastPandas(self.dataframe, log2(self.graph), self.where)
 
+	def log10(self):
+		return FastPandas(self.dataframe, log10(self.graph), self.where)
+
+	def nextafter(self,y):
+		return FastPandas(self.dataframe, nextafter(self.graph,y), self.where)
+
 	def pow(self,y):
 		return FastPandas(self.dataframe, pow(self.graph,y), self.where)
+
+	def power(self,y):
+		return FastPandas(self.dataframe, power(self.graph,y), self.where)
 
 	def radians(self):
 		return FastPandas(self.dataframe, radians(self.graph), self.where)
@@ -459,14 +606,23 @@ class FastPandas:
 	def round(self,s):
 		return FastPandas(self.dataframe, round(self.graph,s), self.where)
 
+	def setseed(self):
+		return FastPandas(self.dataframe, setseed(self.graph), self.where)
+
 	def sin(self):
 		return FastPandas(self.dataframe, sin(self.graph), self.where)
 
 	def sign(self):
 		return FastPandas(self.dataframe, sign(self.graph), self.where)
 
+	def signbit(self):
+		return FastPandas(self.dataframe, signbit(self.graph), self.where)
+
 	def sqrt(self):
 		return FastPandas(self.dataframe, sqrt(self.graph), self.where)
+
+	def xor(self):
+		return FastPandas(self.dataframe, xor(self.graph), self.where)
 
 	def tan(self):
 		return FastPandas(self.dataframe, tan(self.graph), self.where)

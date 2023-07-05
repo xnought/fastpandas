@@ -37,10 +37,38 @@
 		<tr>
 			<td style="text-align: left">
 				<code class="language-plaintext highlighter-rouge"
-					>atan2(x, y)</code
+					>asin(x)</code
+				>
+			</td>
+			<td style="text-align: left">computes the arcsine of x</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>asin(0.5)</code
+				>
+			</td>
+			<td style="text-align: left">0.5235987755982989</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>atan(x)</code
 				>
 			</td>
 			<td style="text-align: left">computes the arctangent of x</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>atan(0.5)</code
+				>
+			</td>
+			<td style="text-align: left">0.4636476090008061</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>atan2(x, y)</code
+				>
+			</td>
+			<td style="text-align: left">computes the arctangent (x, y)</td>
 			<td style="text-align: left">
 				<code class="language-plaintext highlighter-rouge"
 					>atan2(0.5, 0.5)</code
@@ -96,18 +124,20 @@
 		</tr>
 		<tr>
 			<td style="text-align: left">
-				<code class="language-plaintext highlighter-rouge">chr(x)</code>
+				<code class="language-plaintext highlighter-rouge"
+					>ceiling(x)</code
+				>
 			</td>
 			<td style="text-align: left">
-				returns a character which is corresponding the the ASCII code
-				value or Unicode code point
+				rounds the number up. Alias of
+				<code class="language-plaintext highlighter-rouge">ceil</code>.
 			</td>
 			<td style="text-align: left">
 				<code class="language-plaintext highlighter-rouge"
-					>chr(65)</code
+					>ceiling(17.4)</code
 				>
 			</td>
-			<td style="text-align: left">A</td>
+			<td style="text-align: left">18</td>
 		</tr>
 		<tr>
 			<td style="text-align: left">
@@ -150,6 +180,41 @@
 		<tr>
 			<td style="text-align: left">
 				<code class="language-plaintext highlighter-rouge"
+					>even(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				round to next even number by rounding away from zero.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>even(2.9)</code
+				>
+			</td>
+			<td style="text-align: left">4</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>factorial(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				See
+				<code class="language-plaintext highlighter-rouge">!</code>
+				operator. Computes the product of the current integer and all
+				integers below it
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>factorial(4)</code
+				>
+			</td>
+			<td style="text-align: left">24</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
 					>floor(x)</code
 				>
 			</td>
@@ -160,6 +225,183 @@
 				>
 			</td>
 			<td style="text-align: left">17</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>gamma(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				interpolation of (x-1) factorial (so decimal inputs are allowed)
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>gamma(5.5)</code
+				>
+			</td>
+			<td style="text-align: left">52.34277778455352</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>gcd(x, y)</code
+				>
+			</td>
+			<td style="text-align: left">
+				computes the greatest common divisor of x and y
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>gcd(42, 57)</code
+				>
+			</td>
+			<td style="text-align: left">3</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>greatest_common_divisor(x, y)</code
+				>
+			</td>
+			<td style="text-align: left">
+				computes the greatest common divisor of x and y
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>greatest_common_divisor(42, 57)</code
+				>
+			</td>
+			<td style="text-align: left">3</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>greatest(x1, x2, ...)</code
+				>
+			</td>
+			<td style="text-align: left">selects the largest value</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>greatest(3, 2, 4, 4)</code
+				>
+			</td>
+			<td style="text-align: left">4</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>isfinite(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns true if the floating point value is finite, false
+				otherwise
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>isfinite(5.5)</code
+				>
+			</td>
+			<td style="text-align: left">true</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>isinf(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns true if the floating point value is infinite, false
+				otherwise
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>isinf('Infinity'::float)</code
+				>
+			</td>
+			<td style="text-align: left">true</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>isnan(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Returns true if the floating point value is not a number, false
+				otherwise
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>isnan('NaN'::float)</code
+				>
+			</td>
+			<td style="text-align: left">true</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>lcm(x, y)</code
+				>
+			</td>
+			<td style="text-align: left">
+				computes the least common multiple of x and y
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>lcm(42, 57)</code
+				>
+			</td>
+			<td style="text-align: left">798</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>least_common_multiple(x, y)</code
+				>
+			</td>
+			<td style="text-align: left">
+				computes the least common multiple of x and y
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>least_common_multiple(42, 57)</code
+				>
+			</td>
+			<td style="text-align: left">798</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>least(x1, x2, ...)</code
+				>
+			</td>
+			<td style="text-align: left">selects the smallest value</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>least(3, 2, 4, 4)</code
+				>
+			</td>
+			<td style="text-align: left">2</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>lgamma(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				computes the log of the
+				<code class="language-plaintext highlighter-rouge">gamma</code>
+				function.
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>lgamma(2)</code
+				>
+			</td>
+			<td style="text-align: left">0</td>
 		</tr>
 		<tr>
 			<td style="text-align: left">
@@ -201,6 +443,41 @@
 		</tr>
 		<tr>
 			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>log10(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				alias of
+				<code class="language-plaintext highlighter-rouge">log</code>.
+				computes the 10-log of <em>x</em>
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>log10(1000)</code
+				>
+			</td>
+			<td style="text-align: left">3</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>nextafter(x, y)</code
+				>
+			</td>
+			<td style="text-align: left">
+				return the next floating point value after <em>x</em> in the
+				direction of <em>y</em>
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>nextafter(1::float, 2::float)</code
+				>
+			</td>
+			<td style="text-align: left">1.0000001</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
 				<code class="language-plaintext highlighter-rouge">pi()</code>
 			</td>
 			<td style="text-align: left">returns the value of pi</td>
@@ -219,6 +496,24 @@
 			<td style="text-align: left">
 				<code class="language-plaintext highlighter-rouge"
 					>pow(2, 3)</code
+				>
+			</td>
+			<td style="text-align: left">8</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>power(x, y)</code
+				>
+			</td>
+			<td style="text-align: left">
+				Alias of
+				<code class="language-plaintext highlighter-rouge">pow</code>.
+				computes x to the power of y
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>power(2, 3)</code
 				>
 			</td>
 			<td style="text-align: left">8</td>
@@ -251,7 +546,7 @@
 					>random()</code
 				>
 			</td>
-			<td style="text-align: left">…</td>
+			<td style="text-align: left">various</td>
 		</tr>
 		<tr>
 			<td style="text-align: left">
@@ -314,6 +609,22 @@
 		<tr>
 			<td style="text-align: left">
 				<code class="language-plaintext highlighter-rouge"
+					>signbit(x)</code
+				>
+			</td>
+			<td style="text-align: left">
+				returns whether the signbit is set or not
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>signbit(-0.0)</code
+				>
+			</td>
+			<td style="text-align: left">true</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
 					>sqrt(x)</code
 				>
 			</td>
@@ -329,6 +640,18 @@
 		</tr>
 		<tr>
 			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge">xor(x)</code>
+			</td>
+			<td style="text-align: left">bitwise XOR</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge"
+					>xor(17, 5)</code
+				>
+			</td>
+			<td style="text-align: left">20</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
 				<code class="language-plaintext highlighter-rouge">tan(x)</code>
 			</td>
 			<td style="text-align: left">computes the tangent of x</td>
@@ -338,6 +661,18 @@
 				>
 			</td>
 			<td style="text-align: left">-1.995200412208242</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge">@</code>
+			</td>
+			<td style="text-align: left">
+				absolute value (parentheses optional if operating on a column)
+			</td>
+			<td style="text-align: left">
+				<code class="language-plaintext highlighter-rouge">@(-2)</code>
+			</td>
+			<td style="text-align: left">2</td>
 		</tr>
 	</tbody>
 </table>

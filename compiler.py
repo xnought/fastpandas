@@ -46,27 +46,43 @@ unary_aggregates = [
 unary_numerical = [
     "abs(x)",
     "acos(x)",
+    "asin(x)",
+    "atan(x)",
     "atan2(x, y)",
     "bit_count(x)",
     "cbrt(x)",
     "ceil(x)",
-    "chr(x)",
+    "ceiling(x)",
     "cos(x)",
     "cot(x)",
     "degrees(x)",
+    "even(x)",
+    "factorial(x)",
     "floor(x)",
+    "gamma(x)",
+    "gcd(x, y)",
+    "greatest_common_divisor(x, y)",
+    "isfinite(x)",
+    "isinf(x)",
+    "isnan(x)",
+    "lcm(x, y)",
+    "least_common_multiple(x, y)",
+    "lgamma(x)",
     "ln(x)",
     "log(x)",
     "log2(x)",
-    # "pi()",
+    "log10(x)",
+    "nextafter(x, y)",
     "pow(x, y)",
+    "power(x, y)",
     "radians(x)",
-    # "random()",
     "round(v, s)",
-    # "setseed(x)",
+    "setseed(x)",
     "sin(x)",
     "sign(x)",
+    "signbit(x)",
     "sqrt(x)",
+    "xor(x)",
     "tan(x)",
 ]
 
@@ -94,6 +110,23 @@ where_connectives = [
     ("or", "_or"),
     ("is", "_is"),
     ("is not", "_is_not"),
+]
+
+type_casts = [
+    ("BIGINT", "bigint"),
+    ("INT", "int"),
+    ("TINYINT", "tinyint"),
+    ("HUGEINT", "hugeint"),
+    ("SMALLINT", "smallint"),
+    ("UBIGINT", "ubigint"),
+    ("UINTEGER", "uint"),
+    ("UTINYINT", "utinyint"),
+    ("USMALLINT", "usmallint"),
+    ("DOUBLE", "double"),
+    ("BOOLEAN", "bool"),
+    ("VARCHAR", "varchar"),
+    ("DATE", "date"),
+    ("TIMESTAMP", "timestamp"),
 ]
 
 
@@ -144,9 +177,7 @@ def add_unary_to_class(u):
     _str_params = "," + str_params(parameters[1:]) if len(parameters) > 1 else ""
     func_name = "\tdef {}(self{}):\n".format(name, _str_params)
     # what if the param is not a primitive? what if its another column?
-    func_body = (
-        f"\t\treturn FastPandas(self.dataframe, {name}(self.graph{_str_params}), self.where)"
-    )
+    func_body = f"\t\treturn FastPandas(self.dataframe, {name}(self.graph{_str_params}), self.where)"
     full = func_name + func_body
     return full
 
@@ -155,6 +186,15 @@ def compile_numeric_operator(operator, nickname):
     func_name = f"\tdef {nickname}(self, other):\n"
     func_body = "\t\treturn FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + '{}' + str(other) + ')', self.graph), self.where)\n".format(
         operator
+    )
+    full = func_name + func_body
+    return full
+
+
+def compile_typecast(typecast, nickname):
+    func_name = f"\tdef {nickname}(self):\n"
+    func_body = "\t\treturn FastPandas(self.dataframe, DuckDBOp(lambda c: '(' + c + ')::' + '{}', self.graph), self.where)\n".format(
+        typecast
     )
     full = func_name + func_body
     return full
@@ -239,6 +279,9 @@ def compile_all():
 
         for op, nickname in where_connectives:
             f.write(compile_where_connectives(op, nickname) + "\n")
+
+        for typecast, nickname in type_casts:
+            f.write(compile_typecast(typecast, nickname) + "\n")
 
         for u in unary:
             f.write(add_unary_to_class(u) + "\n\n")

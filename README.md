@@ -45,7 +45,7 @@ There is no need to compute them separetly, then combine. Just run'em all at onc
 
 ## Usage
 
-Check out [`example.ipynb`](example.ipynb) for real examples you can run through or continue. 
+Check out [`example.ipynb`](example.ipynb) for real examples you can run through or continue.
 
 <a target="_blank" href="https://colab.research.google.com/drive/1oMIIEzl6nl4OVXxaXd9gOnyYg2omh-9X?usp=sharing">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
@@ -131,4 +131,21 @@ Or going back to the counting unique elements if I wanted to counted the number 
 ```python
 between_0_and_10 = FastPandas(large_df)["a"].gte(0)._and(FastPandas(large_df)["b"].lte(10))
 FastPandas(large_df)["a"].filter(between_0_and_10).approx_count_distinct().item()
+```
+
+**Type Casting**
+
+You can easily call type cast functions like `.int()` or `.float()` on a column for type conversion.
+
+For example, the `.factorial()` function needs an integer in each row so you can do
+
+```python
+df = pd.DataFrame({'a': [1, 2, 3]})
+_factorial = FastPandas(df)["a"].int().factorial() # notice the .int()
+print(_factorial.df())
+"""
+ 1
+ 2
+ 6
+"""
 ```
